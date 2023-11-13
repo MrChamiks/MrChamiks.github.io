@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="./site2/css/bootstrap.min.css" rel="stylesheet">
+  <title>Votre Portail</title>
+  <link href="./style.css" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'Agbalumo'; /* Nom de la police */
+      src: url('./Agbalumo-Regular.ttf'); /* Chemin vers le fichier de police */
+    }
+
+    body {
+      font-family: 'Agbalumo';
+      background-image: url('./preview/background.png');
+      background-size: cover; /* pour couvrir l'ensemble du body */
+      background-position: top; /* positionner l'image au centre */
+      background-repeat: no-repeat; /* ne pas répéter l'image */
+    }
+
+    .card {
+      border: 1px solid #ddd;
+      margin: 10px;
+      padding: 15px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <div class="col-md-12 text-center" style="padding:100px;">
+    <h1 style="font-size:100px;color:#FFF;">The Cham's WorkBench !</h1>
+  </div>
+
+  <div class="col-md-4 mx-auto d-flex justify-content-center" onclick="window.location.href='./site1/index.html'">
+    <div class="card d-flex justify-content-center">
+      <h5 class="card-title">The Manderville Clock</h5>
+      <!-- Autres informations ou image pour la carte -->
+    </div>
+  </div>
+
+  <div class="col-md-4 mx-auto d-flex justify-content-center" onclick="window.location.href='./site2/index.html'">
+    <div class="card d-flex justify-content-center">
+      <h5 class="card-title">Citizen Trade</h5>
+      <!-- Autres informations ou image pour la carte -->
+    </div>
+  </div>
+
+  <div class="col-md-4 mx-auto d-flex justify-content-center" onclick="window.location.href='./site2/index.html'">
+    <div class="card d-flex justify-content-center">
+      <h5 class="card-title">A venir... ?</h5>
+      <!-- Autres informations ou image pour la carte -->
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+@font-face {
+  font-family: 'Agbalumo'; /* Nom de la police */
+  src: url('./Agbalumo-Regular.ttf'); /* Chemin vers le fichier de police */
+  /* Vous pouvez également spécifier d'autres formats de police ici */
+}
+
+body {
+  font-family: 'Agbalumo';
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  background-image: url('./preview/background.png');
+  background-size: cover; /* pour couvrir l'ensemble du body */
+  background-position: top; /* positionner l'image au centre */
+  background-repeat: no-repeat; /* ne pas répéter l'image */
+}
+
+.card {
+  width: 200px;
+  height: 150px;
+  border: 1px solid #ddd;
+  margin: 10px;
+  padding: 15px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}

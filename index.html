@@ -3,66 +3,164 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="./site2/css/bootstrap.min.css" rel="stylesheet">
-  <title>Votre Portail</title>
-  <link href="./style.css" rel="stylesheet">
+  <link href="./page2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <title>Cham's WorkBench</title>
   <style>
+
     @font-face {
       font-family: 'Agbalumo'; /* Nom de la police */
       src: url('./Agbalumo-Regular.ttf'); /* Chemin vers le fichier de police */
+      /* Vous pouvez également spécifier d'autres formats de police ici */
     }
 
     body {
       font-family: 'Agbalumo';
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
       background-image: url('./preview/background.png');
       background-size: cover; /* pour couvrir l'ensemble du body */
       background-position: top; /* positionner l'image au centre */
       background-repeat: no-repeat; /* ne pas répéter l'image */
     }
 
-    .card {
-      border: 1px solid #ddd;
-      margin: 10px;
-      padding: 15px;
-      text-align: center;
-      cursor: pointer;
-      transition: transform 0.3s ease;
+    .chevron {
+        transition: transform 0.3s ease;
     }
 
-    .card:hover {
-      transform: scale(1.05);
+    .chevron.rotate {
+        transform: rotate(90deg);
     }
+
+    .hide {
+      display:none;
+    }
+
+    .project_view {
+      padding-bottom:10px;
+    }
+
+    .menu {
+      background-color:#575A72;
+      padding:50px;
+      margin-top:100px;
+      border-radius:20px;
+    }
+
+    .profile_pic {
+      height:200px;
+      width:200px;
+      border-radius:100px;
+    }
+
+    .project_line {
+      margin-top:10px;
+      background-color:#514F68;
+      padding:10px 10px 10px 10px;
+      cursor:pointer;
+    }
+
+    .button_go {
+      border:solid #FFF 2px;
+      padding:10px;
+      text-align:center;
+      color:#FFF;
+      cursor:pointer;
+      text-decoration:none;
+      font-size:20px;
+      border-radius:10px;
+    }
+
+    .page_preview {
+      border:solid #FFF 2px;
+      cursor:pointer;
+      text-decoration:none;
+      border-radius:10px;
+      min-height:150px;
+      margin-top:25px;
+    }
+
   </style>
 </head>
 <body>
-  <div class="col-md-12 text-center" style="padding:100px;">
-    <h1 style="font-size:100px;color:#FFF;">The Cham's WorkBench !</h1>
-  </div>
 
-  <div class="col-md-4 mx-auto d-flex justify-content-center" onclick="window.location.href='./site1/index.html'">
-    <div class="card d-flex justify-content-center">
-      <h5 class="card-title">The Manderville Clock</h5>
-      <!-- Autres informations ou image pour la carte -->
+  <div class="col-offset-4 col-md-4">
+    <div class="col-md-12 menu" style="text-align:center;">
+      <img class="profile_pic" src="./profile.jpg">
+
+      <!-- ### -->
+      <div class="row project_line" style="color:#FFF;margin-top:50px;">
+        <div class="col-md-8 offset-2">
+          The Manderville Clock
+        </div>
+        <div class="col-md-2">
+          <i style="color:#FFF" class="chevron material-icons">arrow_forward_ios</i>
+        </div>
+        <div class="row project_view" style="display:none">
+          <div class="col-md-6">
+            <a href="./page1/index.html"><div class="col-md-12 page_preview"></div></a>
+          </div>
+          <div class="col-md-6">
+            <p style="margin-top:20px;text-align:left;">Projet en rapport avec le jeu Final Fantasy XIV permettant de suivre l'apparition d'objet en jeu.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ### -->
+      <div class="row project_line" style="color:#FFF;">
+        <div class="col-md-8 offset-2">
+          Citizen Trade
+        </div>
+        <div class="col-md-2">
+          <i style="color:#FFF" class="chevron material-icons">arrow_forward_ios</i>
+        </div>
+        <div class="row project_view" style="display:none">
+          <div class="col-md-6">
+            <a href="./page2/index.html"><div class="col-md-12 page_preview"></div></a>
+          </div>
+          <div class="col-md-6">
+            <p style="margin-top:20px;text-align:left;">Projet en rapport avec le jeu Star Citizen permettant d'analyser un fichier CSV d'Achat / Revente de ressources.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ### -->
+      <div class="row project_line" style="color:#FFF;">
+        <div class="col-md-8 offset-2">
+          ROGUE
+        </div>
+        <div class="col-md-2">
+          <i style="color:#FFF" class="chevron material-icons">arrow_forward_ios</i>
+        </div>
+        <div class="row project_view" style="display:none">
+          <div class="col-md-6">
+            <a href="./page3/index.html"><div class="col-md-12 page_preview"></div></a>
+          </div>
+          <div class="col-md-6">
+            <p style="margin-top:20px;text-align:left;">Projet de jeu Tactical RogueLike par navigateur.</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="col-md-4 mx-auto d-flex justify-content-center" onclick="window.location.href='./site2/index.html'">
-    <div class="card d-flex justify-content-center">
-      <h5 class="card-title">Citizen Trade</h5>
-      <!-- Autres informations ou image pour la carte -->
-    </div>
-  </div>
-
-  <div class="col-md-4 mx-auto d-flex justify-content-center" onclick="window.location.href='./site2/index.html'">
-    <div class="card d-flex justify-content-center">
-      <h5 class="card-title">A venir... ?</h5>
-      <!-- Autres informations ou image pour la carte -->
-    </div>
-  </div>
-
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script>
+    $(document).ready(function() {
+        $(".project_line").click(function() {
+            var projectView = $(this).find(".project_view");
+              projectView.slideToggle( "normal", function() {
+            });
+
+            var chevron = $(this).find(".chevron");
+            chevron.toggleClass("rotate");
+        });
+    });
+  </script>
 
 </body>
 </html>

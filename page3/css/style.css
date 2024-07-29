@@ -1,22 +1,32 @@
 body {
-    background-color: #f8f9fa;
+    background-color: #2f3542;
 }
 
 .cell {
+    background-color:#57606f;
     width: 10%; /* 10 cells per row, each taking up 10% width */
     padding-bottom: 10%; /* Makes the cells square */
-    background-color: #ffffff;
-    border: 1px solid #dee2e6;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative; /* Needed for positioning animations */
+    border: 1px solid #747d8c;
+    position: relative; /* Nécessaire pour le positionnement de l'overlay */
+    overflow: hidden; /* Assure que l'overlay reste dans les limites de la cellule */
+    text-align:center;
+}
+
+.cell .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 10px;
+    background-color: #ff4757; /* Couleur rouge avec 50% d'opacité */
+    z-index: 1; /* Assure que l'overlay est au-dessus de l'image de fond */
 }
 
 .cell.enemy {
-    background-color: red; /* Couleur de l'ennemi */
+    background-image: url('../img/m1.png'); /* Remplace par le chemin de ton image */
+    background-size: 80% auto;
+    background-repeat: no-repeat;
+    background-position: bottom; /* Centre l'image */
     z-index: 2;
-    transition: background-color 0.5s ease; /* Smooth color transition */
 }
 
 .enemy-moving {
@@ -25,16 +35,31 @@ body {
 }
 
 .cell.player {
-    background-color: blue; /* Couleur du joueur */
+    background-image: url('../img/p1.png'); /* Remplace par le chemin de ton image */
+    background-size: 80% auto;
+    background-repeat: no-repeat;
+    background-position: bottom; /* Centre l'image */
     z-index: 2;
 }
 
+.player_status {
+    background-color:#a4b0be;
+    height:120px;
+    position:relative;
+    border-radius:5px;
+}
+
+.status-pic {
+    height:100px;
+    margin-top:10px;
+}
+
 .cell.obstacle {
-    background-color: #6c757d;
+    background-color: #a4b0be;
 }
 
 .cell.path {
-    background-color: rgba(0, 0, 255, 0.5); /* Couleur du chemin */
+    background-color: #eccc68; /* Couleur du chemin */
     z-index: 3;
 }
 
@@ -50,22 +75,18 @@ body {
     animation: shake 0.5s ease;
 }
 
-.cell.hit {
-    background-color: #dc3545; /* Change color to indicate hit */
-}
-
 .cell.highlight {
-    background-color: #fab1a0 !important; /* Par exemple, un vert translucide */
+    background-color: #ff7f50 !important; /* Par exemple, un vert translucide */
     z-index: 2;
 }
 
 .cell.allowspellcast {
-    background-color: #81ecec; /* Par exemple, un vert translucide */
+    cursor:pointer;
+    background-color: #70a1ff;
     z-index: 1;
 }
 
-
-#spell-bar {
+.player_spellbar {
     display: flex;
     justify-content: center;
     margin-top: 10px;
@@ -75,11 +96,51 @@ body {
     width: 50px;
     height: 50px;
     border: 1px solid #000;
+    border-radius:5px;
     margin: 0 5px;
     cursor: pointer;
-    background-color: #eee;
+    background-color: #FFF;
 }
 
 .spell-slot.selected {
-    background-color: #ccc;
+    background-color: #7bed9f;
+    cursor: pointer;
+}
+
+#spell-description {
+    color:#a4b0be;
+    min-height:75px;
+}
+
+.logbox {
+    position:absolute;
+    width:100%;
+    bottom:0px;
+    height:40%;
+    border:solid #FFF 1px;
+    border-radius:5px;
+}
+
+.buttondiv {
+    width:100%;
+    position:absolute;
+    bottom:41%;
+}
+
+.endButton {
+    width:50%;
+    border:solid #FFF 2px;
+    border-radius:5px;
+    margin-top:50px;
+    background-color:#2f3542;
+    font-size:30px;
+    font-weight:bold;
+    color:#FFF;
+}
+
+.bonus-div {
+    border:solid #FFF 1px;
+    height:50px;
+    width:50px;
+    margin-left:30px;
 }

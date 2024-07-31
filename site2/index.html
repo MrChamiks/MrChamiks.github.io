@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <link href="./css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+  <link href="./css/style.css" rel="stylesheet">
+</head>
+<body>
+
+  <div class="col-md-12" style="text-align:center;">
+    <div class="col-md-4 offset-md-4"
+         style="margin-top: 50px; background-color: #FFF; height: 100px; display: flex;
+         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);align-items: center; justify-content: center;border-radius:25px;">
+        <input type="file" id="csvFileInput" accept=".csv">
+    </div>
+  </div>
+  <div id="resultTable" class="col-md-10 offset-md-1" style="margin-top:50px;">
+    <table class="resultSection">
+      <tr style="position: sticky; top: 0;;">
+          <th style="background-color: #34495e;">Objet</th>
+          <th colspan=3 style="background-color: #ff4757;">ACHAT</th>
+          <th colspan=3 style="background-color: #2ed573;">VENTE</th>
+          <th style="background-color: #34495e;">Profit</th>
+      </tr>
+      <tr>
+        <th></th>
+        <th>Planète</th>
+        <th>Lieux</th>
+        <th>Valeur (achat)</th>
+        <th>Planète</th>
+        <th>Lieux</th>
+        <th>Valeur (vente)</th>
+        <th></th>
+      </tr>
+    </table>
+
+  </div>
+  <div class="col-md-12" style="height:100px;"></div>
+
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="./script/script.js"></script>
+</body>
+</html>

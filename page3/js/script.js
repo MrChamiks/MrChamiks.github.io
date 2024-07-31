@@ -1,44 +1,51 @@
 $(document).ready(function() {
-    const gridSize = 10;
-    const player = { x: 0, y: 0, movementPoints: 3, health: 100 };
-    const enemy = { x: 9, y: 9, movementPoints: 3, health: 100, attackRange: 5 };
+    let turn = 0;
+
     const grid = $("#grid");
-
-    let selectedSpell = null;
-    let moveInProgress = false;
-
-    // Mise à jour des éléments HTML avec les sorts
-    const spellSlots = document.querySelectorAll('.spell-slot');
-    const descriptionDiv = document.getElementById('spell-description');
-
-    // Initialisation de la grille
+    const gridSize = 10;
     for (let i = 0; i < gridSize; i++) {
         for (let j = 0; j < gridSize; j++) {
             grid.append(`<div class="cell" data-x="${j}" data-y="${i}"></div>`);
         }
     }
 
-    // Fonction pour appliquer l'effet d'un sort
-    function applySpellEffect(x, y, range) {
-        for (let dx = -range; dx <= range; dx++) {
-            for (let dy = -range; dy <= range; dy++) {
-                const cellX = x + dx;
-                const cellY = y + dy;
-                if (cellX >= 0 && cellX < gridSize && cellY >= 0 && cellY < gridSize) {
-                    const cell = $(`.cell[data-x='${cellX}'][data-y='${cellY}']`);
-                    if (cell.hasClass("enemy")) {
-                        // Inflige des dégâts à l'ennemi
-                        enemy.health -= 10; // Exemple de valeur de dégâts
-                        updateEnemyHealth();
-                        if (enemy.health <= 0) {
-                            alert("L'ennemi est mort !");
-                            // Réinitialisez ou terminez le jeu
-                        }
-                    }
-                }
-            }
+    const player = { type: "player", x: 0, y: 0, movementPoints: 3, health: 100 };
+    const enemies = [
+        { type: "enemy", x: 7, y: 3, movementPoints: 3, health: 100, attackRange: 5 },
+        { type: "enemy", x: 8, y: 5, movementPoints: 3, health: 100, attackRange: 5 }
+    ];
+
+    const entities = [player, ...enemies];
+    entities.forEach((entity, index) => {
+        entity.index = index;
+    });
+
+    updatePlayerPosition(player.x, player.y);
+    enemies.forEach((enemy, index) => {
+        console.log("enemy spawned");
+        updateEnemyPosition(enemy, index, enemy.x, enemy.y);
+    });
+
+    addObstacle(2, 2);
+    addObstacle(2, 3);
+    addObstacle(2, 4);
+
+    let selectedSpell = null;
+    let moveInProgress = false;
+
+    const spellSlots = document.querySelectorAll('.spell-slot');
+    const descriptionDiv = document.getElementById('spell-description');
+
+    // Gestion du clic droit pour annuler la sélection du sort
+    $(document).contextmenu(function(event) {
+        event.preventDefault(); // Empêche le menu contextuel par défaut
+        if (selectedSpell !== null) {
+            selectedSpell = null;
+            clearHighlightedCells();
+            clearAllowSpellCastCells();
+            $(".spell-slot").removeClass("selected");
         }
-    }
+    });
 
     spellSlots.forEach(slot => {
         const spellIndex = slot.getAttribute('data-spell');
@@ -96,25 +103,102 @@ $(document).ready(function() {
         clearHighlightedCells();
     });
 
-    // Placement initial du joueur et de l'ennemi
-    updatePlayerPosition(player.x, player.y);
-    updateEnemyPosition(enemy.x, enemy.y);
-
-    // Ajout d'obstacles (pour l'exemple)
-    addObstacle(2, 2);
-    addObstacle(2, 3);
-    addObstacle(2, 4);
-
-    // Gestion du clic droit pour annuler la sélection du sort
-    $(document).contextmenu(function(event) {
-        event.preventDefault(); // Empêche le menu contextuel par défaut
-        if (selectedSpell !== null) {
-            selectedSpell = null;
-            clearHighlightedCells();
-            clearAllowSpellCastCells();
+    // Sélection d'un sort
+    $(".spell-slot").click(function() {
+        if (!moveInProgress) {
             $(".spell-slot").removeClass("selected");
+            $(this).addClass("selected");
+            clearAllowSpellCastCells();
+            highlightSpellRange(selectedSpell.range, selectedSpell.rangeshape);
         }
     });
+
+    playerTurn = false;
+    launchTurn();
+
+    /*====================================================================================================*/
+    /*====================================================================================================*/
+    /*====================================================================================================*/
+    /*====================================================================================================*/
+    /*====================================================================================================*/
+    /*====================================================================================================*/
+    /*====================================================================================================*/
+    /*====================================================================================================*/
+    /*====================================================================================================*/
+    /*====================================================================================================*/
+    /* FUNCTIONS */
+    /*====================================================================================================*/
+    /*====================================================================================================*/
+    /*====================================================================================================*/
+    /*====================================================================================================*/
+    /*====================================================================================================*/
+    /*====================================================================================================*/
+    /*====================================================================================================*/
+    /*====================================================================================================*/
+    /*====================================================================================================*/
+    /*====================================================================================================*/
+
+    function launchTurn() {
+        if (entities[turn].type == "player") {
+            playerTurn = true;
+            console.log("Tour du joueur");
+        } else if (entities[turn].type == "enemy") {
+            playerTurn = false;
+            ennemyTurn = entities[turn];
+            console.log("Tour de l'ennemi "+entities[turn].index);
+            enemyTurn(entities[turn], entities[turn].index);
+        }
+        turn = (turn + 1) % entities.length;
+    }
+
+    function showDamage(cell, number) {
+        var targetOffset = cell.offset();
+        var targetHeight = cell.height();
+        var targetWidth = cell.width();
+
+        // Créer et ajouter dynamiquement l'élément de nombre
+        var numberElement = $('<div class="number"></div>')
+            .text(number)
+            .css({
+                top: targetOffset.top - 25,
+                left: targetOffset.left + targetWidth / 2,
+                opacity: 1
+            })
+            .appendTo('body');
+
+        // Animer l'élément de nombre
+        numberElement.animate({
+            top: '-=50',
+            opacity: 0
+        }, 2000, function() {
+            $(this).remove();
+        });
+    }
+
+    // Fonction pour appliquer l'effet d'un sort
+    function applySpellEffect(x, y, range) {
+        for (let dx = -range; dx <= range; dx++) {
+            for (let dy = -range; dy <= range; dy++) {
+                const cellX = x + dx;
+                const cellY = y + dy;
+                if (cellX >= 0 && cellX < gridSize && cellY >= 0 && cellY < gridSize) {
+                    const cell = $(`.cell[data-x='${cellX}'][data-y='${cellY}']`);
+                    if (cell.hasClass("enemy")) {
+                        number = 25;
+                        showDamage(cell, number);
+
+                        // Inflige des dégâts à l'ennemi
+                        enemy.health -= number; // Exemple de valeur de dégâts
+                        updateEnemyHealth();
+                        if (enemy.health <= 0) {
+                            alert("L'ennemi est mort !");
+                            // Réinitialisez ou terminez le jeu
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     function reconstructPath(node) {
         const path = [];
@@ -129,7 +213,7 @@ $(document).ready(function() {
 
     // Gestion du bouton "Passer le tour"
     $("#end-turn-button").click(function() {
-        enemyTurn();
+        launchTurn();
     });
 
     // Fonction pour obtenir les cellules dans la portée d'une unité
@@ -164,8 +248,6 @@ $(document).ready(function() {
             cellsInRange.forEach(function(cell) {
                 if (cell.y === start.y || cell.x === start.x) {
                     if (minrange != 0) {
-                        console.log(Math.abs(cell.y));
-                        console.log(Math.abs(start.y + minrange));
                         if (cell.y >= start.y + minrange || 
                             cell.x >= start.x + minrange || 
                             cell.y <= start.y - minrange || 
@@ -177,7 +259,6 @@ $(document).ready(function() {
                     }
                 }
             });
-            console.log()
             return filteredCells;
         } else if (rangeshape == "global") {
             return cellsInRange;
@@ -216,10 +297,10 @@ $(document).ready(function() {
     }
 
     // Fonction de mise à jour de la position de l'ennemi
-    function updateEnemyPosition(x, y) {
-        $(".cell").removeClass("enemy");
-        $(`.cell[data-x='${x}'][data-y='${y}']`).addClass("enemy");
-        $(`.cell[data-x='${x}'][data-y='${y}']`).html('<div class="overlay" style="width: '+enemy.health+'%;"></div>');
+    function updateEnemyPosition(instance, index, x, y) {
+        $(".cell .enemy_" + index).removeClass("enemy enemy_" + index);
+        $(`.cell[data-x='${x}'][data-y='${y}']`).addClass("enemy enemy_" + index);
+        $(`.cell[data-x='${x}'][data-y='${y}']`).html(`<div class="overlay" style="width: ${instance.health}%;"></div>`);
     }
 
     // Fonction pour ajouter des obstacles
@@ -243,7 +324,7 @@ $(document).ready(function() {
 
     // Fonction pour vérifier si une cellule est un obstacle
     function isObstacle(x, y, ignoreEnemy = false) {
-        if (!ignoreEnemy && x === enemy.x && y === enemy.y) {
+        if (!ignoreEnemy && enemies.some(enemy => enemy.x === x) && enemies.some(enemy => enemy.y === y)) {
             return true;
         }
         return $(`.cell[data-x='${x}'][data-y='${y}']`).hasClass("obstacle");
@@ -291,7 +372,7 @@ $(document).ready(function() {
     }
 
     // Fonction pour déplacer l'ennemi vers une cellule cible
-    function moveEnemyTo(targetCell, callback) {
+    function moveEnemyTo(enemy, index, targetCell, callback) {
         removeOverlay("player");
         if (!targetCell) return;
         const path = aStar(enemy, targetCell, gridSize, (x, y) => isObstacle(x, y, true));
@@ -302,7 +383,7 @@ $(document).ready(function() {
                 const finalPosition = partialPath[partialPath.length - 1];
                 enemy.x = finalPosition.x;
                 enemy.y = finalPosition.y;
-                updateEnemyPosition(finalPosition.x, finalPosition.y);
+                updateEnemyPosition(enemy, index, finalPosition.x, finalPosition.y);
 
                 // Exécute le callback une fois le mouvement terminé
                 if (callback) callback();
@@ -314,10 +395,10 @@ $(document).ready(function() {
     }
 
     // Tour de l'ennemi
-    function enemyTurn() {
+    function enemyTurn(enemy, index) {
         const targetCell = getClosestAttackCell(enemy, player);
         if (targetCell) {
-            moveEnemyTo(targetCell, function() {
+            moveEnemyTo(enemy, index, targetCell, function() {
                 setTimeout(function() {
                     const targetCellInRange = getClosestAttackCell(enemy, player);
                     if (targetCellInRange && hasLineOfSight(enemy, player)) {
@@ -332,11 +413,10 @@ $(document).ready(function() {
     }
 
     // Fonction pour obtenir la cellule d'attaque la plus proche
-    function getClosestAttackCell(attacker, target) {
-        const attackRange = attacker.attackRange;
+    function getClosestAttackCell(enemy, target) {
+        const attackRange = enemy.attackRange;
         let closestCell = null;
         let shortestPath = null;
-
         for (let dx = -attackRange; dx <= attackRange; dx++) {
             for (let dy = -attackRange; dy <= attackRange; dy++) {
                 const x = target.x + dx;
@@ -344,7 +424,7 @@ $(document).ready(function() {
                 if (x >= 0 && x < gridSize && y >= 0 && y < gridSize && !(dx === 0 && dy === 0)) {
                     if (Math.abs(dx) + Math.abs(dy) <= attackRange && !isObstacle(x, y)) {
                         if (hasLineOfSight({ x, y }, target)) {
-                            const path = aStar(attacker, { x, y }, gridSize, isObstacle);
+                            const path = aStar(enemy, { x, y }, gridSize, isObstacle);
                             if (path && (!shortestPath || path.length < shortestPath.length)) {
                                 shortestPath = path;
                                 closestCell = { x, y };
@@ -365,6 +445,11 @@ $(document).ready(function() {
         setTimeout(function() {
             $(`.cell[data-x='${enemy.x}'][data-y='${enemy.y}']`).removeClass("attack-animation");
         }, 500); // Duration of the shake animation
+
+        cell = $(`.cell[data-x=`+player.x+`][data-y=`+player.y+`]`);
+
+        number = 10;
+        showDamage(cell, number);
 
         player.health -= 10; // Exemple de valeur de dégâts
         updatePlayerHealth();
@@ -524,16 +609,6 @@ $(document).ready(function() {
             }
         }
     }
-
-    // Sélection d'un sort
-    $(".spell-slot").click(function() {
-        if (!moveInProgress) {
-            $(".spell-slot").removeClass("selected");
-            $(this).addClass("selected");
-            clearAllowSpellCastCells();
-            highlightSpellRange(selectedSpell.range, selectedSpell.rangeshape);
-        }
-    });
 
     // Fonction pour vérifier si une cible est à portée
     function isWithinRange(x1, y1, x2, y2, range) {

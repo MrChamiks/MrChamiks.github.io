@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>L'Horloge des Manderville</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/css/select2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="./index.css" rel="stylesheet">
+  </head>
+  <body>
+    <!-- Div pour résolutions inférieures à 1000px -->
+    <div class="full-screen-div">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="message">
+            <b>WOOPS !</b>
+          </div>
+          <br></br>
+        </div>
+        <div class="col-md-12">
+          <div class="background-div-4 card cardshadow col-md-12 custom-rounded-bottom-top"></div>
+        </div>
+        <div class="col-md-10 offset-md-1">
+          <br></br>
+          <div class="message">
+            <b>EN</b>
+            <br></br>
+            "The 'small screen mode' is not yet supported. For the best experience of the website's features, please have a screen width larger than 1000px."
+            <br></br>
+            <b>FR</b>
+            <br></br>
+            "Le mode 'écran petit' n'est pas encore pris en charge. Pour profiter au mieux des fonctionnalités du site, veuillez disposer d'une largeur d'écran supérieure à 1000px."
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row nopadding card cardshadow">
+        <div class="background-div-1 card cardshadow col-md-12 custom-rounded-flat-top">
+          <div class="row">
+            <div class="col-md-2" style="padding:59px 0px 0px 59px;text-align:center;">
+              <select class="form-select custom-select" id="flag-select">
+                <option value="fr">FR</option>
+                <option value="en">EN</option>
+              </select>
+            </div>
+            <div class="col-md-2 offset-md-8" style="padding:35px 0px 0px 20px;text-align:center;">
+              <i style="color:#FFF" class="material-icons">light_mode</i>
+              <form>
+              <!-- Rounded switch -->
+                <label class="switch">
+                  <input type="checkbox">
+                    <div class="slider round"></div>
+                </label>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-10">
+          <div class="card cardshadow text-center" style="margin-top:10px;">
+            <div class="card-body">
+              <h2 class="card-title dark-mode-color"><i class="material-icons">schedule</i> <span data-translate="eorzean_time">Heure Eorzeenne (HE) :</span> <b><span id="eorzeaTime" class="card-text"></span></b></h2>
+              <div class="row">
+                <div class="col-md-7">
+                  <select id="elementSelector" class="form-select mb-3" style="width: 100%;height:100px !important;">
+                    <option data-translate="option_selection" value="">--Sélectionner un Item pour l'ajouter à l'horloge--</option>
+                  </select>
+                </div>
+                <div class="col-md-1">
+                  <button style="width:100%;" class="selectAllOre custom_btn btn btn-xs btn-outline-primary"><i class="material-icons">hardware</i></button>
+                </div>
+                <div class="col-md-1">
+                  <button style="width:100%;" class="selectAllStone custom_btn btn btn-xs btn-outline-primary"><i class="material-icons">landscape</i></button>
+                </div>
+                <div class="col-md-1">
+                  <button style="width:100%;" class="selectAllPlant custom_btn btn btn-xs btn-outline-primary"><i class="material-icons">spa</i></button>
+                </div>
+                <div class="col-md-1">
+                  <button style="width:100%;" class="selectAllWood custom_btn btn btn-xs btn-outline-primary"><i class="material-icons">park</i></button>
+                </div>
+                <div class="col-md-1">
+                  <button data-translate="allselect"style="font-weight:bold;width:100%;height:39px;" class="selectAllitem custom_btn btn btn-xs btn-outline-primary">ALL</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-content" id="content1" style="position:relative;">
+            <div class="overlay" style="text-align:center;vertical-align:middle;">
+              <p data-translate="loading" style="font-weight:bold;margin-top:30px;color:#FFF;">Chargement ...</p>
+            </div>
+            <div class="card cardshadow custom_top">
+              <table class="table mt-2 table-dark-mode" id="countdownTable">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th data-sort-type="string"><button class="sort-btn custom_btn btn btn-xs btn-outline-primary" data-col="1"><span data-translate="filter">Trier</span> <i class="icon_xs material-icons">unfold_more</i></button></th>
+                    <th></th>
+                    <th data-sort-type="string"><button class="sort-btn custom_btn btn btn-xs btn-outline-primary" data-col="3"><span data-translate="filter">Trier</span> <i class="icon_xs material-icons">unfold_more</i></button></th>
+                    <th data-sort-type="time"><button class="sort-btn custom_btn btn btn-xs btn-outline-primary" data-col="4"><span data-translate="filter">Trier</span> <i class="icon_xs material-icons">unfold_more</i></button></th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                  <tr>
+                    <th></th>
+                    <th data-translate="column1" class="dark-mode-color">Recoltable</th>
+                    <th data-translate="column2" class="dark-mode-color">Heure d'apparition (HE)</th>
+                    <th data-translate="column3" class="dark-mode-color">Localisation</th>
+                    <th data-translate="column4" class="dark-mode-color">Temps avant ré-apparition (HE)</th>
+                    <th data-translate="column5" class="dark-mode-color">Fin de disponibilité (HE)</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="countdownTableBody">
+                <!-- Les données du tableau seront ajoutées ici -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="col-md-12 card cardshadow text-center" style="margin-top:10px;">
+            <button class="alertjactabtn dark-mode-color custom-rounded-flat-bottom btn custom_btn"><i style="font-size:20px !important;" class="material-icons">notifications_none</i></button> 
+            <div class="row nopadding">
+              <div class="background-div-2 card col-md-12 custom-rounded-flat-bottom custom-rounded-flat-top">
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-12">
+                    <p style="font-weight:bold;" data-translate="jacta" class="dark-mode-color">JACTA (HE)</p>
+                  </div>
+                </div>
+                <div class="row">
+                  <h2 class="dark-mode-color"><b><span id="jactacountdown"></span></b></h2>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-12 card cardshadow text-center" style="margin-top:10px;">
+            <button class="alertfishbtn dark-mode-color custom-rounded-flat-bottom btn custom_btn"><i style="font-size:20px !important;" class="material-icons">notifications_none</i></button> 
+            <div class="row nopadding">
+              <div class="background-div-3 card col-md-12 custom-rounded-flat-to custom-rounded-flat-bottom"></div>
+            </div>
+            <div class="card-body">
+              <p style="font-weight:bold;" data-translate="ocean" class="dark-mode-color">Pêche en Mer (HE)</p>
+              <h2 class="dark-mode-color"><b><span id="fishingcountdown"></span></b></h2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Pied de page -->
+    <footer>
+      <p style="margin-top:50px;" data-translate="site_title">L'Horloge des Manderville</p>
+      <button class="btn btn-xs btn-outline-primary" target="_blank" onclick="window.location.href='https://www.youtube.com/channel/UCXGx3oobkWfnbSCLzrS-NdA'"><img src="https://assets.stickpng.com/images/627b95205a3e2ac874a75744.png" height="30"> @Chamiks</button>
+    </footer>
+
+    <!-- Lien vers le fichier audio de notification -->
+    <audio id="countdownAudio" preload="auto">
+      <source src="./sounds/sound1.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="countdownAudio2" preload="auto">
+      <source src="./sounds/sound2.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="countdownAudio3" preload="auto">
+      <source src="./sounds/sound3.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
+    <script src="./traduction.js"></script>
+    <script src="./item.js"></script>
+    <script src="./index.js"></script>
+  </body>
+</html>

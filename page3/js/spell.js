@@ -27,7 +27,7 @@ const spells = [
         0, // mana
         10, // damage
         'croix', // shape
-        0 // shapevalue
+        2 // shapevalue
     ),
     new Spell(
         'épine', // name

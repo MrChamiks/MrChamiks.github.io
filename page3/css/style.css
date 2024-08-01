@@ -21,6 +21,10 @@ body {
     z-index: 1; /* Assure que l'overlay est au-dessus de l'image de fond */
 }
 
+.hide {
+    display:none;
+}
+
 .cell.enemy {
     background-image: url('../img/m1.png'); /* Remplace par le chemin de ton image */
     background-size: 80% auto;
@@ -75,7 +79,7 @@ body {
     animation: shake 0.5s ease;
 }
 
-.cell.highlight {
+.cell.spellAreaDamage {
     background-color: #ff7f50 !important; /* Par exemple, un vert translucide */
     z-index: 2;
 }

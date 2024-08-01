@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    let turn = 0;
+    let turn = -1;
 
     const grid = $("#grid");
     const gridSize = 10;
@@ -11,8 +11,8 @@ $(document).ready(function() {
 
     const player = { type: "player", x: 0, y: 0, movementPoints: 3, health: 100 };
     const enemies = [
-        { type: "enemy", x: 7, y: 3, movementPoints: 3, health: 100, attackRange: 5 },
-        { type: "enemy", x: 8, y: 5, movementPoints: 3, health: 100, attackRange: 5 }
+        { type: "enemy", x: 9, y: 9, movementPoints: 3, health: 100, attackRange: 5 },
+        { type: "enemy", x: 9, y: 8, movementPoints: 3, health: 100, attackRange: 5 }
     ];
 
     const entities = [player, ...enemies];
@@ -23,12 +23,14 @@ $(document).ready(function() {
     updatePlayerPosition(player.x, player.y);
     enemies.forEach((enemy, index) => {
         console.log("enemy spawned");
-        updateEnemyPosition(enemy, index, enemy.x, enemy.y);
+        updateEnemyPosition(enemy, index + 1, enemy.x, enemy.y);
     });
 
     addObstacle(2, 2);
     addObstacle(2, 3);
     addObstacle(2, 4);
+    addObstacle(8, 8);
+    addObstacle(8, 9);
 
     let selectedSpell = null;
     let moveInProgress = false;
@@ -64,7 +66,7 @@ $(document).ready(function() {
         if (selectedSpell !== null) {
             // Vérifie si la cellule est surlignée
             if (getCell(targetX, targetY).hasClass('allowspellcast')) {
-                applySpellEffect(targetX, targetY, 2); // 2 est la zone d'effet du sort
+                applySpellEffect();
                 clearHighlightedCells();
                 clearAllowSpellCastCells();
                 selectedSpell = null;
@@ -83,19 +85,21 @@ $(document).ready(function() {
 
     // Gestion du survol des cellules
     $(".cell").hover(function() {
-        clearHighlightedCells();
-        const targetX = parseInt($(this).data("x"));
-        const targetY = parseInt($(this).data("y"));
+        if (!moveInProgress) {
+            clearHighlightedCells();
+            const targetX = parseInt($(this).data("x"));
+            const targetY = parseInt($(this).data("y"));
 
-        if (selectedSpell !== null) {
-            if (getCell(targetX, targetY).hasClass('allowspellcast')) {
-                highlightSpellArea(targetX, targetY, selectedSpell.shape, selectedSpell.shapevalue);
-            }
-        } else {
-            clearPath();
-            const path = aStar(player, { x: targetX, y: targetY }, gridSize, (x, y) => isObstacle(x, y));
-            if (path && path.length <= player.movementPoints + 1) {
-                highlightPath(path);
+            if (selectedSpell !== null) {
+                if (getCell(targetX, targetY).hasClass('allowspellcast')) {
+                    highlightSpellArea(targetX, targetY, selectedSpell.shape, selectedSpell.shapevalue);
+                }
+            } else {
+                clearPath();
+                const path = aStar(player, { x: targetX, y: targetY }, gridSize, (x, y) => isObstacle(x, y));
+                if (path && path.length <= player.movementPoints + 1) {
+                    highlightPath(path);
+                }
             }
         }
     }, function() {
@@ -139,16 +143,20 @@ $(document).ready(function() {
     /*====================================================================================================*/
 
     function launchTurn() {
+        turn = (turn + 1) % entities.length;
         if (entities[turn].type == "player") {
+            $("#end-turn-button").removeClass("hide");
             playerTurn = true;
             console.log("Tour du joueur");
         } else if (entities[turn].type == "enemy") {
+            $("#end-turn-button").addClass("hide");
             playerTurn = false;
             ennemyTurn = entities[turn];
             console.log("Tour de l'ennemi "+entities[turn].index);
-            enemyTurn(entities[turn], entities[turn].index);
+            enemyTurn(entities[turn], entities[turn].index, function() {
+                launchTurn()
+            });
         }
-        turn = (turn + 1) % entities.length;
     }
 
     function showDamage(cell, number) {
@@ -176,28 +184,22 @@ $(document).ready(function() {
     }
 
     // Fonction pour appliquer l'effet d'un sort
-    function applySpellEffect(x, y, range) {
-        for (let dx = -range; dx <= range; dx++) {
-            for (let dy = -range; dy <= range; dy++) {
-                const cellX = x + dx;
-                const cellY = y + dy;
-                if (cellX >= 0 && cellX < gridSize && cellY >= 0 && cellY < gridSize) {
-                    const cell = $(`.cell[data-x='${cellX}'][data-y='${cellY}']`);
-                    if (cell.hasClass("enemy")) {
-                        number = 25;
-                        showDamage(cell, number);
+    function applySpellEffect() {
+        $(`.spellAreaDamage`).each(function() {
+            if ($(this).hasClass("enemy")) {
+                // Récupérer toutes les classes de l'élément
+                const classes = $(this).attr("class").split(/\s+/);
+                const enemyClass = classes.find(cls => cls.startsWith("enemy_"));
 
-                        // Inflige des dégâts à l'ennemi
-                        enemy.health -= number; // Exemple de valeur de dégâts
-                        updateEnemyHealth();
-                        if (enemy.health <= 0) {
-                            alert("L'ennemi est mort !");
-                            // Réinitialisez ou terminez le jeu
-                        }
-                    }
+                if (enemyClass) {                    
+                    const enemyIndex = enemyClass.split('_')[1];
+                    number = 25;
+                    showDamage($(this), number);
+                    entities[enemyIndex].health = entities[enemyIndex].health - number;
+                    updateEnemyHealth(entities[enemyIndex]);
                 }
             }
-        }
+        });
     }
 
     function reconstructPath(node) {
@@ -281,16 +283,15 @@ $(document).ready(function() {
     // Fonction de mise à jour de la position du joueur
     function removeOverlay(type) {
         $(".overlay").each(function() {
-            if (!$(this).parent().hasClass(type)) {
+            if ($(this).parent().hasClass(type)) {
                 $(this).remove();
             }
         })
     }
 
-
     // Fonction de mise à jour de la position du joueur
     function updatePlayerPosition(x, y) {
-        removeOverlay("enemy");
+        removeOverlay("player");
         $(".cell").removeClass("player");
         $(`.cell[data-x='${x}'][data-y='${y}']`).addClass("player");
         $(`.cell[data-x='${x}'][data-y='${y}']`).html('<div class="overlay" style="width: '+player.health+'%;"></div>');
@@ -298,7 +299,9 @@ $(document).ready(function() {
 
     // Fonction de mise à jour de la position de l'ennemi
     function updateEnemyPosition(instance, index, x, y) {
-        $(".cell .enemy_" + index).removeClass("enemy enemy_" + index);
+        $(".cell .enemy_" + index).each(function() {
+            $(this).removeClass("enemy enemy_" + index);
+        });
         $(`.cell[data-x='${x}'][data-y='${y}']`).addClass("enemy enemy_" + index);
         $(`.cell[data-x='${x}'][data-y='${y}']`).html(`<div class="overlay" style="width: ${instance.health}%;"></div>`);
     }
@@ -324,7 +327,7 @@ $(document).ready(function() {
 
     // Fonction pour vérifier si une cellule est un obstacle
     function isObstacle(x, y, ignoreEnemy = false) {
-        if (!ignoreEnemy && enemies.some(enemy => enemy.x === x) && enemies.some(enemy => enemy.y === y)) {
+        if (!ignoreEnemy && enemies.some(enemy => enemy.x === x && enemy.y === y)) {
             return true;
         }
         return $(`.cell[data-x='${x}'][data-y='${y}']`).hasClass("obstacle");
@@ -354,7 +357,7 @@ $(document).ready(function() {
 
     // Fonction pour déplacer le joueur
     function movePlayer(player, path) {
-        removeOverlay("enemy");
+        removeOverlay("player");
         moveInProgress = true;
         animateMovement({ class: "player" }, path, () => {
             const finalPosition = path[path.length - 1];
@@ -369,47 +372,6 @@ $(document).ready(function() {
     // Fonction à appeler une fois l'animation terminée
     function onMovePlayerComplete() {
         moveInProgress = false;
-    }
-
-    // Fonction pour déplacer l'ennemi vers une cellule cible
-    function moveEnemyTo(enemy, index, targetCell, callback) {
-        removeOverlay("player");
-        if (!targetCell) return;
-        const path = aStar(enemy, targetCell, gridSize, (x, y) => isObstacle(x, y, true));
-        if (path && path.length > 1) {
-            const stepsToMove = Math.min(enemy.movementPoints, path.length - 1);
-            const partialPath = path.slice(0, stepsToMove + 1);
-            animateMovement({ class: "enemy" }, partialPath, () => {
-                const finalPosition = partialPath[partialPath.length - 1];
-                enemy.x = finalPosition.x;
-                enemy.y = finalPosition.y;
-                updateEnemyPosition(enemy, index, finalPosition.x, finalPosition.y);
-
-                // Exécute le callback une fois le mouvement terminé
-                if (callback) callback();
-            });
-        } else if (callback) {
-            // Si aucun déplacement n'est nécessaire, exécutez directement le callback
-            callback();
-        }
-    }
-
-    // Tour de l'ennemi
-    function enemyTurn(enemy, index) {
-        const targetCell = getClosestAttackCell(enemy, player);
-        if (targetCell) {
-            moveEnemyTo(enemy, index, targetCell, function() {
-                setTimeout(function() {
-                    const targetCellInRange = getClosestAttackCell(enemy, player);
-                    if (targetCellInRange && hasLineOfSight(enemy, player)) {
-                        const distance = Math.abs(enemy.x - player.x) + Math.abs(enemy.y - player.y);
-                        if (distance <= enemy.attackRange) {
-                            attackPlayer();
-                        }
-                    }
-                }, 500); // Délai de 0.5 seconde (500 ms)
-            });
-        }
     }
 
     // Fonction pour obtenir la cellule d'attaque la plus proche
@@ -438,8 +400,69 @@ $(document).ready(function() {
         return closestCell;
     }
 
+    // Tour de l'ennemi
+    function enemyTurn(enemy, index, onComplete) {
+        const targetCell = getClosestAttackCell(enemy, player);
+        
+        if (targetCell) {
+            // Déplacer l'ennemi vers la cellule cible
+            moveEnemyTo(enemy, index, targetCell, function() {
+                // Exécuter après que le mouvement de l'ennemi soit terminé
+                setTimeout(function() {
+                    const targetCellInRange = getClosestAttackCell(enemy, player);
+                    if (targetCellInRange && hasLineOfSight(enemy, player)) {
+                        const distance = Math.abs(enemy.x - player.x) + Math.abs(enemy.y - player.y);
+                        
+                        if (distance <= enemy.attackRange) {
+                            // Si l'ennemi est à portée, il attaque le joueur
+                            attackPlayer(enemy);
+                        }
+                    }
+                    
+                    // Exécuter le callback principal après la fin de toutes les actions
+                    if (onComplete) onComplete();
+                    
+                }, 500); // Délai de 0.5 seconde (500 ms)
+            });
+        } else {
+            // Si aucun déplacement n'est effectué, appeler directement onComplete
+            if (onComplete) onComplete();
+        }
+    }
+
+    // Fonction pour déplacer l'ennemi vers une cellule cible
+    function moveEnemyTo(enemy, index, targetCell, callback) {
+        removeOverlay("enemy_"+index);
+
+        if (!targetCell) return;
+
+        const path = aStar(enemy, targetCell, gridSize, (x, y) => isObstacle(x, y, true));
+
+        if (path && path.length > 1) {
+            const stepsToMove = Math.min(enemy.movementPoints, path.length - 1);
+            const partialPath = path.slice(0, stepsToMove + 1);
+
+            // Animer le mouvement de l'ennemi le long du chemin calculé
+            animateMovement({ class: "enemy" }, partialPath, () => {
+                const finalPosition = partialPath[partialPath.length - 1];
+                enemy.x = finalPosition.x;
+                enemy.y = finalPosition.y;
+
+                // Mettre à jour la position de l'ennemi après le déplacement
+                updateEnemyPosition(enemy, index, finalPosition.x, finalPosition.y);
+
+                // Exécute le callback une fois le mouvement terminé
+                if (callback) callback();
+            });
+        } else if (callback) {
+            // Si aucun déplacement n'est nécessaire, exécutez directement le callback
+            callback();
+        }
+    }
+
+
     // Fonction pour attaquer le joueur
-    function attackPlayer() {
+    function attackPlayer(enemy) {
         // Apply the animation effect
         $(`.cell[data-x='${enemy.x}'][data-y='${enemy.y}']`).addClass("attack-animation");
         setTimeout(function() {
@@ -459,7 +482,7 @@ $(document).ready(function() {
         $(`.cell[data-x=`+player.x+`][data-y=`+player.y+`]`).html('<div class="overlay" style="width: '+player.health+'%;"></div>');
     }
 
-    function updateEnemyHealth() {
+    function updateEnemyHealth(enemy) {
         $(`.cell[data-x=`+enemy.x+`][data-y=`+enemy.y+`]`).html('<div class="overlay" style="width: '+enemy.health+'%;"></div>');
     }
 
@@ -476,7 +499,7 @@ $(document).ready(function() {
         let err = dx - dy;
 
         while (x0 !== x1 || y0 !== y1) {
-            if (isObstacle(x0, y0, true)) {  // Pass true to ignore enemy as obstacle
+            if (isObstacle(x0, y0)) {  // Pass true to ignore enemy as obstacle
                 return false;
             }
             const e2 = 2 * err;
@@ -493,7 +516,6 @@ $(document).ready(function() {
         return true;
     }
 
-    // Fonction A* pour trouver le chemin le plus court
     function aStar(start, goal, gridSize, isObstacle) {
         const openList = [];
         const closedList = new Set();
@@ -525,24 +547,24 @@ $(document).ready(function() {
                 }
 
                 const tentativeG = currentNode.g + 1;
-                const neighborNode = {
-                    x: neighbor.x,
-                    y: neighbor.y,
-                    g: tentativeG,
-                    h: Math.abs(neighbor.x - goal.x) + Math.abs(neighbor.y - goal.y),
-                    f: 0,
-                    parent: currentNode
-                };
-                neighborNode.f = neighborNode.g + neighborNode.h;
 
-                const existingNode = openList.find(node => node.x === neighborNode.x && node.y === neighborNode.y);
+                const existingNode = openList.find(node => node.x === neighbor.x && node.y === neighbor.y);
                 if (existingNode) {
                     if (tentativeG < existingNode.g) {
                         existingNode.g = tentativeG;
-                        existingNode.f = neighborNode.f;
+                        existingNode.f = tentativeG + existingNode.h;
                         existingNode.parent = currentNode;
                     }
                 } else {
+                    const neighborNode = {
+                        x: neighbor.x,
+                        y: neighbor.y,
+                        g: tentativeG,
+                        h: Math.abs(neighbor.x - goal.x) + Math.abs(neighbor.y - goal.y),
+                        f: 0,
+                        parent: currentNode
+                    };
+                    neighborNode.f = neighborNode.g + neighborNode.h;
                     openList.push(neighborNode);
                 }
             }
@@ -551,34 +573,21 @@ $(document).ready(function() {
         return null;
     }
 
-    // Fonction pour obtenir les voisins d'une cellule
     function getNeighbors(node, gridSize) {
+        const { x, y } = node;
         const neighbors = [];
-        if (node.x > 0) neighbors.push({ x: node.x - 1, y: node.y });
-        if (node.x < gridSize - 1) neighbors.push({ x: node.x + 1, y: node.y });
-        if (node.y > 0) neighbors.push({ x: node.x, y: node.y - 1 });
-        if (node.y < gridSize - 1) neighbors.push({ x: node.x, y: node.y + 1 });
+
+        // Ajout des voisins horizontaux et verticaux
+        if (x > 0) neighbors.push({ x: x - 1, y: y }); // Gauche
+        if (x < gridSize - 1) neighbors.push({ x: x + 1, y: y }); // Droite
+        if (y > 0) neighbors.push({ x: x, y: y - 1 }); // Haut
+        if (y < gridSize - 1) neighbors.push({ x: x, y: y + 1 }); // Bas
+
         return neighbors;
     }
 
-    // Fonction pour surligner les cellules accessibles
-    function highlightAccessibleCells(character) {
-        clearHighlightedCells();
-        for (let i = 0; i < gridSize; i++) {
-            for (let j = 0; j < gridSize; j++) {
-                const path = aStar(character, { x: j, y: i }, gridSize, isObstacle);
-                if (path && path.length <= character.movementPoints + 1) {
-                    const cell = $(`.cell[data-x='${j}'][data-y='${i}']`);
-                    if (!cell.hasClass("player") && !cell.hasClass("enemy") && !cell.hasClass("path")) {
-                        cell.addClass("highlight");
-                    }
-                }
-            }
-        }
-    }
-
     function clearHighlightedCells() {
-        $(".cell").removeClass("highlight");
+        $(".cell").removeClass("spellAreaDamage");
     }
     function clearAllowSpellCastCells() {
         $(".cell").removeClass("allowspellcast");
@@ -591,21 +600,21 @@ $(document).ready(function() {
                 const cellX = x + ix;
                 const cellY = y;
                 if (cellX >= 0 && cellX < gridSize && cellY >= 0 && cellY < gridSize) {
-                    $(`.cell[data-x='${cellX}'][data-y='${cellY}']`).addClass("highlight");
+                    $(`.cell[data-x='${cellX}'][data-y='${cellY}']`).addClass("spellAreaDamage");
                 }
             }
             for (let iy = -shapevalue; iy <= shapevalue; iy++) {
                 const cellX = x;
                 const cellY = y + iy;
                 if (cellX >= 0 && cellX < gridSize && cellY >= 0 && cellY < gridSize) {
-                    $(`.cell[data-x='${cellX}'][data-y='${cellY}']`).addClass("highlight");
+                    $(`.cell[data-x='${cellX}'][data-y='${cellY}']`).addClass("spellAreaDamage");
                 }
             }
         } else if (shape == "dot") {
             const cellX = x;
             const cellY = y;
             if (cellX >= 0 && cellX < gridSize && cellY >= 0 && cellY < gridSize) {
-                $(`.cell[data-x='${cellX}'][data-y='${cellY}']`).addClass("highlight");
+                $(`.cell[data-x='${cellX}'][data-y='${cellY}']`).addClass("spellAreaDamage");
             }
         }
     }

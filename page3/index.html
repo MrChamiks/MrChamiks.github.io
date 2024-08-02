@@ -8,58 +8,83 @@
     <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-1">
-                <div class="row bonus-div">
-                </div>
-                <div class="row bonus-div">
-                </div>
-                <div class="row bonus-div">
-                </div>
-                <div class="row bonus-div">
-                </div>
+    <!-- Section pour le texte centré -->
+    <div class="full-height" style="margin-top:50px;">
+        <div class="text-center">
+            <div style="font-weight:bold; font-size:50px; color:#FFF;">
+                TACTICAL ROGUELIKE
             </div>
-            <div class="col-md-7">
-                <div id="grid" class="row no-gutters"></div>
-            </div>
-            <div class="col-md-4" style="position:relative;">
-                <div class="row player_status">
-                    <div class="col-md-4">
-                        <img src="./img/p1.png" class="status-pic">
+        </div>
+    </div>
+    <div class="col-md-12 row">
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-md-1">
+                    <div class="row bonus-div">
                     </div>
-                    <div class="col-md-8">
-                        <div class="row" style="margin-top:10px;">
-                            <div class="col-md-12">
-                                Points de vie :
-                            </div>
-                            <div class="col-md-12" style="margin-top:15px;">
-                                Energie :
-                            </div>
-                            <div class="col-md-12" style="margin-top:15px;">
-                                Points de vie :
+                    <div class="row bonus-div">
+                    </div>
+                    <div class="row bonus-div">
+                    </div>
+                    <div class="row bonus-div">
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div id="grid" class="row no-gutters"></div>
+                </div>
+                <div class="col-md-4" style="position:relative;">
+                    <div class="row player_status">
+                        <div class="col-md-4">
+                            <img src="./img/p1.png" class="status-pic">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="row" style="margin-top:10px;color:#FFF;font-weight:bold;">
+                                <div class="col-md-12">
+                                    <div style="width:100%;background-color:red;height:10px;"></div>
+                                </div>
+                                <div class="col-md-12 row" style="margin-top:10px;color:#FFF;font-weight:bold;">
+                                  <div class="col-md-6" style="margin-top:10px;color:#FFF;font-weight:bold;">
+                                      PA : <span class="player_pa" style="margin-left:5px;">6</span>
+                                  </div>
+                                  <div class="col-md-6" style="margin-top:10px;color:#FFF;font-weight:bold;">
+                                      PM : <span class="player_pa" style="margin-left:5px;">3</span>
+                                  </div>
+                                </div>
+                                <div class="col-md-12 row" style="margin-top:10px;color:#FFF;font-weight:bold;">
+                                  <div class="col-md-12" style="margin-top:10px;color:#FFF;font-weight:bold;">
+                                      Niveau : <span class="player_lvl" style="margin-left:5px;">1</span>
+                                  </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row player_spellbar">
-                    <div class="d-flex justify-content-center">
-                        <div class="spell-slot" data-spell="0"></div>
-                        <div class="spell-slot" data-spell="1"></div>
-                        <div class="spell-slot" data-spell="2"></div>
-                        <div class="spell-slot" data-spell="3"></div>
-                        <div class="spell-slot" data-spell="4"></div>
+                    <div class="row player_spellbar">
+                        <div class="d-flex justify-content-center">
+                            <div class="spell-slot" data-spell="0"></div>
+                            <div class="spell-slot" data-spell="1"></div>
+                            <div class="spell-slot" data-spell="2"></div>
+                            <div class="spell-slot" data-spell="3"></div>
+                            <div class="spell-slot" data-spell="4"></div>
+                        </div>
+                    </div>
+                    <div class="row player_spellbar" id="spell-description">
+                    </div>
+                    <div class="row buttondiv">
+                        <div class="col-md-12" style="padding-left:0px;width:100%;text-align:left;">
+                            <button id="end-turn-button" class="endButton">Fin du tour</button>
+                        </div>
+                    </div>
+                    <div class="row logbox">
                     </div>
                 </div>
-                <div class="row player_spellbar" id="spell-description">
-                </div>
-                <div class="row buttondiv">
-                    <div class="col-md-12" style="padding-left:0px;width:100%;text-align:left;">
-                        <button id="end-turn-button" class="endButton">Fin du tour</button>
-                    </div>
-                </div>
-                <div class="row logbox">
-                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Section pour le texte centré -->
+    <div class="full-height" style="margin-top:50px;">
+        <div class="text-center">
+            <div style="font-weight:bold; font-size:50px; color:#FFF;">
+                FLOOR 1
             </div>
         </div>
     </div>

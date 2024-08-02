@@ -1,5 +1,8 @@
 body {
-    background-color: #2f3542;
+  background-image: url('../img/bg.png');
+  background-size: cover; /* Adapte l'image pour couvrir tout l'arrière-plan */
+  background-position: center; /* Centre l'image */
+  background-repeat: no-repeat; /* Évite la répétition de l'image */
 }
 
 .cell {
@@ -47,10 +50,11 @@ body {
 }
 
 .player_status {
-    background-color:#a4b0be;
+    border:solid #FFF 2px;
     height:120px;
     position:relative;
     border-radius:5px;
+    background-color:#1D2840;
 }
 
 .status-pic {
@@ -116,13 +120,23 @@ body {
     min-height:75px;
 }
 
+.full-height {
+    display: flex;
+    align-items: center; /* Centrage vertical */
+    justify-content: center; /* Centrage horizontal */
+}
+.text-center {
+    text-align: center;
+}
+
 .logbox {
     position:absolute;
     width:100%;
     bottom:0px;
     height:40%;
-    border:solid #FFF 1px;
+    border:solid #FFF 2px;
     border-radius:5px;
+    background-color:#1D2840;
 }
 
 .buttondiv {
@@ -136,17 +150,23 @@ body {
     border:solid #FFF 2px;
     border-radius:5px;
     margin-top:50px;
-    background-color:#2f3542;
+    background-color:#1D2840;
     font-size:30px;
     font-weight:bold;
     color:#FFF;
 }
 
 .bonus-div {
-    border:solid #FFF 1px;
+    border:solid #FFF 2px;
+    background-color:#1D2840;
     height:50px;
     width:50px;
     margin-left:30px;
+    border-radius:5px;
+}
+
+.bonus-div:not(:first-of-type) {
+    margin-top: 10px;
 }
 
 .number {

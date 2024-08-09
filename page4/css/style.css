@@ -10,6 +10,7 @@
     #364657 -> bleu 1
     #7099a5 -> bleu 2 clair
     #4d3d3c -> marron 2
+    #d63031 -> rouge
 
 */
 
@@ -20,10 +21,60 @@
     font-style: normal;
 }
 
+@keyframes damageEffect {
+    0% {
+        transform: scale(1) rotate(0deg);
+        filter: brightness(100%) contrast(100%);
+    }
+    25% {
+        transform: scale(1.05) rotate(-5deg);
+        filter: brightness(110%) contrast(110%);
+    }
+    50% {
+        transform: scale(1) rotate(0deg);
+        filter: brightness(100%) contrast(100%);
+    }
+}
+
+/* Custom scrollbar styles */
+.skill-action::-webkit-scrollbar {
+    width: 12px;
+}
+
+.skill-action::-webkit-scrollbar-track {
+    background: #364657;
+    border-radius: 8px;
+}
+
+.skill-action::-webkit-scrollbar-thumb {
+    background: #c3b68f;
+    border-radius: 8px;
+    border: 3px solid #c3b68f; /* Adds a white border around the scrollbar thumb */
+}
+
+.item-button {
+    width: 50px; /* Prend la largeur totale de la colonne */
+    height: 50px; /* Hauteur du bouton */
+    margin-bottom: 10px; /* Espacement entre les boutons */
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    cursor: pointer;
+}
+
+.item-button:hover {
+    background-color: #e9ecef;
+}
+
 body {
-    background-color:#364657;
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(to top, #364657, #5a6b7d);
     overflow-x: hidden;
-    font-family: 'Pixeled' !important; /* Nom de la police et police de secours */
+    font-family: 'Pixeled', sans-serif;
+    position: relative;
+    overflow: hidden;
 }
 
 .character_info {
@@ -35,6 +86,7 @@ body {
 
 .character_stats {
     border:solid #516775 2px;
+    border-radius:5px;
     padding:20px;
 }
 
@@ -78,14 +130,12 @@ body {
 .character-image-active img {
     width: 100%;
     border-radius: 5px;
-    border:solid #c3b68f 1px;
 }
 
 .character-image img {
     width: 100%; /* L'image occupe toute la largeur de son conteneur */
     height: 100%;
     border-radius: 5px;
-    border:solid #c3b68f 1px;
 }
 
 .character-details {
@@ -115,12 +165,12 @@ body {
 
 .health-fill {
     width: 70%; /* La largeur de la barre de vie, ajustez selon les besoins */
-    background-color: #f44336; /* Rouge pour la santé */
+    background-color: #d63031; /* Rouge pour la santé */
 }
 
 .energy-fill {
     width: 50%; /* La largeur de la barre d'énergie, ajustez selon les besoins */
-    background-color: #2196f3; /* Bleu pour l'énergie */
+    background-color: #7099a5; /* Bleu pour l'énergie */
 }
 
 .bar-label {
@@ -149,11 +199,38 @@ body {
     padding:30px;
 }
 
-.section_skill {
+.skill-method {
+    border-right:solid #516775 2px;
     min-height:200px;
+}
+
+.skill-action {
+    overflow-y:auto;
+    max-height:200px;
+    display: flex;
+    flex-wrap: wrap;
+    padding-top:20px;
+}
+
+.method-btn {
+    background-color: #212d36;
+    margin-top:10px;
+    color:#FFF;
+    font-size:10px;
+    padding:5px;
+}
+
+.method-btn:focus, 
+.method-btn:active {
+    outline: none;
+    box-shadow: none;
+}
+
+.section_skill {
     margin-top:15px;
     border: solid #516775 2px;
     border-radius:5px;
+    max-height:200px;
 }
                     
 .section_scene {
@@ -174,10 +251,86 @@ body {
 
 .place_mob_1, .place_mob_2, .place_mob_3 {
     flex: 1;
-    border: 1px solid red;
+    background-image: url('../img/mob1.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: top;
     min-height: 300px;
     margin: 20px;
     box-sizing: border-box;
+    position:relative;
+}
+
+.hide {
+    display:none;
+}
+
+.place_mob_1, .place_mob_3 {
+    margin-bottom: 40px;
+}
+
+.place_mob_1, .place_mob_2, .place_mob_3 {
+    flex: 1;
+    background-image: url('../img/mob1.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: top;
+    min-height: 300px;
+    box-sizing: border-box;
+    position:relative;
+    max-width:169px;
+    z-index:99;
+    transition: transform 0.3s ease; /* Transition douce pour le zoom */
+}
+
+.place_mob_1 img, .place_mob_2 img, .place_mob_3 img {
+    width:100%;
+    position:absolute;
+    bottom:0;
+}
+
+.place_mob_1:hover, .place_mob_2:hover, .place_mob_3:hover {
+    transform: scale(1.1); /* Zoom de 10% au survol */
+}
+
+.place_mob_1.clicked, .place_mob_2.clicked, .place_mob_3.clicked {
+    animation: damageEffect 0.6s; /* Applique l'animation au clic */
+}
+
+.monster-info {
+    position: absolute;
+    top: -75px;
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    color: white;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    z-index: 10;
+}
+
+.monster-name {
+    font-size: 18px;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.monster-health {
+    width: 100%;
+    background-color: #444;
+    border-radius: 5px;
+    overflow: hidden;
+    height: 10px;
+    border:solid #c3b68f 1px;
+}
+
+.monster-health-bar {
+    width: 100%; /* Remplacez cette valeur pour refléter l'état de santé du monstre */
+    height: 100%;
+    background-color: #d63031; /* Rouge par défaut pour une barre de vie */
+    transition: width 0.5s ease; /* Transition pour les changements de vie */
+    border-radius: 5px;
 }
 
 .place_mob_boss {
@@ -187,8 +340,7 @@ body {
     transform: translate(-50%, -50%);
     width: 400px;
     min-height: 400px;
-    background-color: rgba(255, 0, 0, 0.5);
-    border: 2px red black;
+    /*border: 1px solid red;*/
     z-index: 10;
 }
 
@@ -201,6 +353,16 @@ body {
 #rpg-text {
     white-space: pre-wrap; /* Permet aux sauts de ligne de fonctionner */
     color:#c3b68f;
+}
+
+.monster-chevron {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid #FFF; /* Couleur du chevron */
+    margin: -10px auto 0; /* Espace entre le texte et le chevron */
+    animation: bounce 1s infinite; /* Animation de rebondissement */
 }
 
 .chevron {

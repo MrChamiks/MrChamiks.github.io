@@ -8,13 +8,12 @@
     <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-
-    <div class="row" style="margin-top:50px;">
+    <div class="row" style="margin-top:50px !important;">
         <div class="col-md-8 offset-md-2" style="border: solid #516775 1px;border-radius:5px;padding:3px;background-color: #c3b68f;box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;">
             <div class="row section_character">
                 <div class="col-md-4 character_info">
                     <div class="character-image">
-                        <img src="./img/bg.png" alt="Character Image">
+                        <img src="./img/char3.png" alt="Character Image">
                     </div>
                     <div class="character-details">
                         <p class="character-name">NAME</p>
@@ -56,26 +55,60 @@
                         </div>
                         <div class="col-md-7" style="padding-right:0px !important;">
                             <div class="character-image-active">
-                                <img src="./img/bg.png" alt="Character Image">
+                                <img src="./img/char3.png" alt="Character Image">
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-12 section_skill">
-
+                            <div class="row">
+                                <div class="col-md-5" style="padding-right: 0px !important;">
+                                    <div class="skill-method">
+                                        <button class="method-btn">> Action</button>
+                                        <button class="method-btn">> Compétences</button>
+                                        <button class="method-btn">> Objet</button>
+                                    </div>
+                                </div>
+                                <div class="col-md-7 skill-action">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6 section_scene">
-                    <div class="place_mob_1"></div>
-                    <div class="place_mob_2"></div>
-                    <div class="place_mob_3"></div>
+                    <div class="place_mob place_mob_1">
+                        <div class="monster-info">
+                            <div class="monster-chevron" style="display: none;"></div>
+                            <div class="monster-name">Monster 1</div>
+                            <div class="monster-health">
+                                <div class="monster-health-bar"></div>
+                            </div>
+                        </div>   
+                    </div>
+                    <div class="place_mob place_mob_2">
+                        <div class="monster-info">
+                            <div class="monster-chevron" style="display: none;"></div>
+                            <div class="monster-name">Monster 2</div>
+                            <div class="monster-health">
+                                <div class="monster-health-bar"></div>
+                            </div>
+                        </div>   
+                    </div>
+                    <div class="place_mob place_mob_3">
+                        <div class="monster-info">
+                            <div class="monster-chevron" style="display: none;"></div>
+                            <div class="monster-name">Monster 3</div>
+                            <div class="monster-health">
+                                <div class="monster-health-bar"></div>
+                            </div>
+                        </div>   
+                    </div>
                     <div class="place_mob_boss"></div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="row" style="margin-top:50px;">
+    <div class="row" style="margin-top:25px;">
         <div class="text-container col-md-12">
             <p id="rpg-text"></p>
             <div class="chevron" style="display: none;"></div>
@@ -83,6 +116,8 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="./js/monster.js"></script>
+    <script src="./js/skill.js"></script>
     <script src="./js/script.js"></script>
 </body>
 </html>

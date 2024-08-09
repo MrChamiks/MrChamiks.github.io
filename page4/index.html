@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TPT RogueLike</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+
+    <div class="row" style="margin-top:50px;">
+        <div class="col-md-8 offset-md-2" style="border: solid #516775 1px;border-radius:5px;padding:3px;background-color: #c3b68f;box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;">
+            <div class="row section_character">
+                <div class="col-md-4 character_info">
+                    <div class="character-image">
+                        <img src="./img/bg.png" alt="Character Image">
+                    </div>
+                    <div class="character-details">
+                        <p class="character-name">NAME</p>
+                        <div class="health-bar">
+                            <div class="bar">
+                                <div class="fill health-fill">
+                                    <span class="bar-label">Health</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="energy-bar">
+                            <div class="bar">
+                                <div class="fill energy-fill">
+                                    <span class="bar-label">Energy</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 character_info">
+                    
+                </div>
+                <div class="col-md-4 character_info">
+                    
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-1 section_relics">
+                    
+                </div>
+                <div class="col-md-5 section_details">
+                    <div class="row">
+                        <div class="col-md-5 character_stats">
+                            <p><span class="label">Force :</span> <span class="value">10</span></p>
+                            <p><span class="label">Agilité :</span> <span class="value">10</span></p>
+                            <p><span class="label">Intelligence :</span> <span class="value">10</span></p>
+                            <p><span class="label">Esquive :</span> <span class="value">10</span></p>
+                            <p><span class="label">Défense :</span> <span class="value">10</span></p>
+                        </div>
+                        <div class="col-md-7" style="padding-right:0px !important;">
+                            <div class="character-image-active">
+                                <img src="./img/bg.png" alt="Character Image">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 section_skill">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 section_scene">
+                    <div class="place_mob_1"></div>
+                    <div class="place_mob_2"></div>
+                    <div class="place_mob_3"></div>
+                    <div class="place_mob_boss"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-top:50px;">
+        <div class="text-container col-md-12">
+            <p id="rpg-text"></p>
+            <div class="chevron" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="./js/script.js"></script>
+</body>
+</html>

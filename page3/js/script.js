@@ -303,8 +303,9 @@ $(document).ready(function() {
 
     // Fonction de mise à jour de la position de l'ennemi
     function updateEnemyPosition(instance, index, x, y) {
-        $(".cell .enemy_" + index).each(function() {
-            $(this).removeClass("enemy enemy_" + index);
+        $(".enemy_" + index).each(function() {
+            $(this).removeClass("enemy");
+            $(this).removeClass("enemy_" + index);
         });
         $(`.cell[data-x='${x}'][data-y='${y}']`).addClass("enemy enemy_" + index);
         $(`.cell[data-x='${x}'][data-y='${y}']`).html(`<div class="overlay" style="width: ${instance.health}%;"></div>`);
@@ -514,15 +515,19 @@ $(document).ready(function() {
         let err = dx - dy;
 
         while (true) {
-            // Vérifie si on a atteint la cellule d'arrivée
-            if (x0 === x1 && y0 === y1) {
-                break;
+            // Débogage : afficher la cellule courante
+            console.log(`Checking cell*: (${x0}, ${y0})`);
+            let currentCell = document.querySelector(`.cell[data-x="${x0}"][data-y="${y0}"]`);
+            if (currentCell) {
+                if (currentCell.classList.contains("obstacle") || 
+                    (currentCell.classList.contains("enemy") && !currentCell.classList.contains("enemy_" + from.index))) {
+                    console.log(`Blocked by cell: (${x0}, ${y0})`);
+                    return false;
+                }
             }
 
-            // Vérifie si la cellule courante est un obstacle
-            let currentCell = $(`.cell[data-x="${x0}"][data-y="${y0}"]`);
-            if (currentCell.hasClass("enemy") && !currentCell.hasClass("enemy_"+from.index) || currentCell.hasClass("obstacle")) {
-                return false;
+            if (x0 === x1 && y0 === y1) {
+                break;
             }
 
             let e2 = err * 2;
@@ -536,7 +541,6 @@ $(document).ready(function() {
             }
         }
 
-        // Ne retourne pas false pour la case d'arrivée même si c'est un obstacle ou un ennemi
         return true;
     }
 

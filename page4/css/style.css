@@ -1,0 +1,226 @@
+/* CHARTE 
+
+    #c3b68f -> Jaune
+    #212d36 -> couleur foncé
+    #5d7f7e -> vert 1
+    #516775 -> vert 2 (grisatre)
+    #7eaca6 -> vert 3 clair
+    #3f5b5d -> vert 4 foncé
+    #764f45 -> marron 1
+    #364657 -> bleu 1
+    #7099a5 -> bleu 2 clair
+    #4d3d3c -> marron 2
+
+*/
+
+@font-face {
+    font-family: 'Pixeled';
+    src: url('../font/Pixeled.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    background-color:#364657;
+    overflow-x: hidden;
+    font-family: 'Pixeled' !important; /* Nom de la police et police de secours */
+}
+
+.character_info {
+    border: solid #516775 2px;
+    border-radius:5px;
+    background-color: #212d36;
+    min-height:100px;
+}
+
+.character_stats {
+    border:solid #516775 2px;
+    padding:20px;
+}
+
+.character_stats p {
+    color:#c3b68f;
+    font-size:10px;
+}
+
+.character_stats .label {
+    display: inline-block;
+    text-align: left;
+}
+
+.character_stats .value {
+    display: inline-block;
+    width:100%;
+    text-align: right;
+}
+
+.character-container {
+    width: 400px; /* Ajustez la largeur selon vos besoins */
+    background-color: #212d36;
+    padding: 20px;
+    border-radius: 5px;
+    border: 2px solid #516775;
+    box-sizing: border-box;
+}
+
+.character-image {
+    float: left; /* Positionne l'image à gauche */
+    width: 85px; /* Ajustez la largeur selon vos besoins */
+    margin-right: 20px;
+    margin-top:5px;
+}
+
+.character-image-active
+{
+    text-align:center;
+}
+
+.character-image-active img {
+    width: 100%;
+    border-radius: 5px;
+    border:solid #c3b68f 1px;
+}
+
+.character-image img {
+    width: 100%; /* L'image occupe toute la largeur de son conteneur */
+    height: 100%;
+    border-radius: 5px;
+    border:solid #c3b68f 1px;
+}
+
+.character-details {
+    overflow: hidden; /* Permet de contenir les flottants et d'éviter les débordements */
+}
+
+.character-name {
+    font-size: 20px;
+    color: #c3b68f;
+    margin-bottom: 10px;
+}
+
+.bar {
+    position: relative;
+    height: 20px;
+    background-color: #3f5b5d;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.fill {
+    height: 100%;
+    position: relative;
+    border-radius: 5px;
+}
+
+.health-fill {
+    width: 70%; /* La largeur de la barre de vie, ajustez selon les besoins */
+    background-color: #f44336; /* Rouge pour la santé */
+}
+
+.energy-fill {
+    width: 50%; /* La largeur de la barre d'énergie, ajustez selon les besoins */
+    background-color: #2196f3; /* Bleu pour l'énergie */
+}
+
+.bar-label {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+    font-weight: bold;
+    font-size:10px;
+    z-index: 1;
+}
+
+.section_relics {
+    background-color: #212d36;
+    min-height: 550px;
+    border: solid #516775 2px;
+    border-radius:5px;
+}
+                    
+.section_details {
+    background-color: #212d36;
+    min-height: 550px;
+    border: solid #516775 2px;
+    border-radius:5px;
+    padding:30px;
+}
+
+.section_skill {
+    min-height:200px;
+    margin-top:15px;
+    border: solid #516775 2px;
+    border-radius:5px;
+}
+                    
+.section_scene {
+    background-color: #212d36;
+    min-height: 550px;
+    background-image: url('../img/bg.png');
+    background-size: 100% auto;
+    background-repeat: no-repeat;
+    background-position: center;
+    border: solid #516775 2px;
+    border-radius:5px;
+    z-index: 2;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    position:relative;
+}
+
+.place_mob_1, .place_mob_2, .place_mob_3 {
+    flex: 1;
+    border: 1px solid red;
+    min-height: 300px;
+    margin: 20px;
+    box-sizing: border-box;
+}
+
+.place_mob_boss {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    min-height: 400px;
+    background-color: rgba(255, 0, 0, 0.5);
+    border: 2px red black;
+    z-index: 10;
+}
+
+.text-container {
+    margin: 0 auto;
+    padding: 20px;
+    text-align:center;
+}
+
+#rpg-text {
+    white-space: pre-wrap; /* Permet aux sauts de ligne de fonctionner */
+    color:#c3b68f;
+}
+
+.chevron {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid #c3b68f; /* Couleur du chevron */
+    margin: 20px auto 0; /* Espace entre le texte et le chevron */
+    animation: bounce 1s infinite; /* Animation de rebondissement */
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0); /* Position de départ */
+    }
+    40% {
+        transform: translateY(-10px); /* Légère élévation */
+    }
+    60% {
+        transform: translateY(-5px); /* Légère descente */
+    }
+}

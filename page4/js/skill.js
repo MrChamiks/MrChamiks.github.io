@@ -7,10 +7,6 @@ class Skill {
         this.cooldownInterval = cooldownInterval;   // Intervalle de relance (1 à 5)
     }
 
-    displayInfo() {
-        return `Nom: ${this.name}, Type: ${this.type}, Valeur: ${this.value}, Coût en énergie: ${this.energyCost}, Intervalle de relance: ${this.cooldownInterval}`;
-    }
-
     canUse(currentEnergy) {
         return currentEnergy >= this.energyCost;
     }

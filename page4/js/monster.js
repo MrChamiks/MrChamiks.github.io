@@ -5,10 +5,6 @@ class Monster {
         this.type = type;                           // Type (normal, boss)
         this.img = img;                             // img (name pour url ./img/...)
     }
-
-    displayInfo() {
-        return `Nom: ${this.name}, vie: ${this.vie}, type: ${this.type}`;
-    }
 }
 
 let monsters = [];

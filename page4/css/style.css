@@ -117,9 +117,13 @@ body {
 
 .character-image {
     float: left; /* Positionne l'image à gauche */
-    width: 85px; /* Ajustez la largeur selon vos besoins */
+    width: 90px; /* Ajustez la largeur selon vos besoins */
     margin-right: 20px;
-    margin-top:5px;
+    margin-top: 5px;
+    height:90px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: top;
 }
 
 .character-image-active
@@ -129,12 +133,6 @@ body {
 
 .character-image-active img {
     width: 100%;
-    border-radius: 5px;
-}
-
-.character-image img {
-    width: 100%; /* L'image occupe toute la largeur de son conteneur */
-    height: 100%;
     border-radius: 5px;
 }
 
@@ -164,13 +162,11 @@ body {
 }
 
 .health-fill {
-    width: 70%; /* La largeur de la barre de vie, ajustez selon les besoins */
-    background-color: #d63031; /* Rouge pour la santé */
+    background-color: #d63031;
 }
 
 .energy-fill {
-    width: 50%; /* La largeur de la barre d'énergie, ajustez selon les besoins */
-    background-color: #7099a5; /* Bleu pour l'énergie */
+    background-color: #7099a5;
 }
 
 .bar-label {
